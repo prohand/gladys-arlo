@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-12
+
 ### Added
 
 - First version of the Arlo integration (Arlo cloud, Gladys 5.3.0 or later).
@@ -33,4 +35,5 @@ the notes of the version's GitHub Release.
 - CI (format, lint, tests on Node 22 and 24, store checks, Docker build),
   Release workflow, GitHub Releases, Dependabot.
 
-[Unreleased]: https://github.com/prohand/gladys-arlo/commits/main
+[Unreleased]: https://github.com/prohand/gladys-arlo/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/prohand/gladys-arlo/releases/tag/v1.0.1

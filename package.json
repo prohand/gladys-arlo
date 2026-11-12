@@ -1,6 +1,6 @@
 {
   "name": "gladys-arlo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Gladys Assistant external integration for Arlo cameras, doorbells, base stations and sirens (Arlo cloud).",
   "type": "module",
