@@ -1,0 +1,720 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "Arlo",
+  "description": {
+    "en": "Arlo cameras, doorbells and sirens: pictures, motion, battery, modes and scenes.",
+    "fr": "Caméras, sonnettes et sirènes Arlo : images, mouvement, batterie, modes et scènes.",
+    "de": "Arlo-Kameras, Türklingeln und Sirenen: Bilder, Bewegung, Akku, Modi und Szenen.",
+    "es": "Cámaras, timbres y sirenas Arlo: imágenes, movimiento, batería, modos y escenas."
+  },
+  "version": "1.0.0",
+  "docker_image": "ghcr.io/prohand/gladys-arlo:1.0.0",
+  "gladys_version": ">=5.3.0",
+  "cover_image": "https://raw.githubusercontent.com/prohand/gladys-arlo/main/cover.png",
+  "categories": ["security", "multimedia"],
+  "keywords": [
+    "arlo",
+    "netgear",
+    "camera",
+    "video doorbell",
+    "siren",
+    "arlo pro",
+    "arlo essential",
+    "arlo ultra",
+    "arlo go",
+    "cloud"
+  ],
+  "transports": ["cloud"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "Getting started",
+        "fr": "Pour commencer",
+        "de": "Erste Schritte",
+        "es": "Primeros pasos"
+      },
+      "description": {
+        "en": "Arlo works through the Arlo cloud: an internet connection and your Arlo account are needed. 1. Enter the email and password of your Arlo account and save. 2. Click \"Send me a code\": Arlo sends a verification code by email or SMS. 3. Type it in \"Validate the code\". Your devices then show up in the Discovery tab. Tip: create a second Arlo account, shared from your main one, for Gladys.",
+        "fr": "Arlo fonctionne via le cloud Arlo : il faut une connexion internet et votre compte Arlo. 1. Saisissez l’e-mail et le mot de passe de votre compte Arlo puis enregistrez. 2. Cliquez sur « M’envoyer un code » : Arlo envoie un code de vérification par e-mail ou SMS. 3. Saisissez-le dans « Valider le code ». Vos appareils apparaissent alors dans l’onglet Découverte. Conseil : créez un second compte Arlo, partagé depuis le principal, pour Gladys.",
+        "de": "Arlo arbeitet über die Arlo-Cloud: Eine Internetverbindung und dein Arlo-Konto sind nötig. 1. Gib die E-Mail-Adresse und das Passwort deines Arlo-Kontos ein und speichere. 2. Klicke auf „Code senden“: Arlo schickt einen Bestätigungscode per E-Mail oder SMS. 3. Gib ihn bei „Code bestätigen“ ein. Deine Geräte erscheinen dann im Tab „Erkennung“. Tipp: Lege für Gladys ein zweites Arlo-Konto an, das vom Hauptkonto freigegeben wird.",
+        "es": "Arlo funciona a través de la nube de Arlo: hace falta conexión a internet y su cuenta Arlo. 1. Introduzca el correo y la contraseña de su cuenta Arlo y guarde. 2. Pulse «Enviarme un código»: Arlo envía un código de verificación por correo o SMS. 3. Escríbalo en «Validar el código». Sus dispositivos aparecen entonces en la pestaña Descubrimiento. Consejo: cree una segunda cuenta Arlo, compartida desde la principal, para Gladys."
+      },
+      "links": [
+        {
+          "url": "https://my.arlo.com",
+          "label": {
+            "en": "Arlo web application",
+            "fr": "Application web Arlo",
+            "de": "Arlo-Webanwendung",
+            "es": "Aplicación web de Arlo"
+          }
+        },
+        {
+          "url": "https://github.com/prohand/gladys-arlo/blob/main/docs/en.md",
+          "label": {
+            "en": "Integration documentation",
+            "fr": "Documentation de l’intégration",
+            "de": "Dokumentation der Integration",
+            "es": "Documentación de la integración"
+          }
+        }
+      ]
+    },
+    {
+      "key": "email",
+      "type": "string",
+      "label": {
+        "en": "Arlo email",
+        "fr": "E-mail Arlo",
+        "de": "Arlo-E-Mail",
+        "es": "Correo de Arlo"
+      },
+      "description": {
+        "en": "The email you log in to the Arlo app with.",
+        "fr": "L’e-mail avec lequel vous vous connectez à l’application Arlo.",
+        "de": "Die E-Mail-Adresse, mit der du dich in der Arlo-App anmeldest.",
+        "es": "El correo con el que inicia sesión en la app Arlo."
+      },
+      "placeholder": {
+        "en": "e.g. me@example.com",
+        "fr": "ex. moi@exemple.fr",
+        "de": "z. B. ich@beispiel.de",
+        "es": "p. ej. yo@ejemplo.es"
+      },
+      "required": true
+    },
+    {
+      "key": "password",
+      "type": "secret",
+      "label": {
+        "en": "Arlo password",
+        "fr": "Mot de passe Arlo",
+        "de": "Arlo-Passwort",
+        "es": "Contraseña de Arlo"
+      },
+      "required": true
+    },
+    {
+      "key": "mfa_method",
+      "type": "select",
+      "label": {
+        "en": "Verification code sent by",
+        "fr": "Code de vérification envoyé par",
+        "de": "Bestätigungscode senden per",
+        "es": "Código de verificación enviado por"
+      },
+      "description": {
+        "en": "Arlo asks for a code at each new login. The method must be set up on your Arlo account.",
+        "fr": "Arlo demande un code à chaque nouvelle connexion. La méthode doit être active sur votre compte Arlo.",
+        "de": "Arlo verlangt bei jeder neuen Anmeldung einen Code. Die Methode muss in deinem Arlo-Konto eingerichtet sein.",
+        "es": "Arlo pide un código en cada nuevo inicio de sesión. El método debe estar activo en su cuenta Arlo."
+      },
+      "required": false,
+      "default": "email",
+      "options": [
+        {
+          "value": "email",
+          "label": {
+            "en": "Email",
+            "fr": "E-mail",
+            "de": "E-Mail",
+            "es": "Correo"
+          }
+        },
+        {
+          "value": "sms",
+          "label": {
+            "en": "SMS",
+            "fr": "SMS",
+            "de": "SMS",
+            "es": "SMS"
+          }
+        }
+      ]
+    },
+    {
+      "key": "refresh_interval",
+      "type": "number",
+      "label": {
+        "en": "Refresh interval (s)",
+        "fr": "Intervalle de rafraîchissement (s)",
+        "de": "Aktualisierungsintervall (s)",
+        "es": "Intervalo de actualización (s)"
+      },
+      "description": {
+        "en": "How often modes, batteries, pictures and recordings are read from Arlo (one minute minimum). Motion and doorbell arrive in real time.",
+        "fr": "Fréquence de lecture des modes, batteries, images et enregistrements (une minute minimum). Mouvement et sonnette arrivent en temps réel.",
+        "de": "Wie oft Modi, Akkus, Bilder und Aufnahmen gelesen werden (mindestens eine Minute). Bewegung und Klingel kommen in Echtzeit.",
+        "es": "Frecuencia de lectura de modos, baterías, imágenes y grabaciones (un minuto mínimo). El movimiento y el timbre llegan en tiempo real."
+      },
+      "required": false,
+      "default": 60,
+      "min": 60,
+      "max": 3600
+    },
+    {
+      "key": "live_snapshot",
+      "type": "boolean",
+      "label": {
+        "en": "Fresh picture on demand",
+        "fr": "Image fraîche à la demande",
+        "de": "Frisches Bild auf Abruf",
+        "es": "Imagen nueva bajo demanda"
+      },
+      "description": {
+        "en": "When Gladys asks for a camera image, have the camera take a new one instead of sending the latest Arlo picture. It wakes battery cameras up and uses their battery.",
+        "fr": "Quand Gladys demande une image, la caméra en prend une nouvelle au lieu d’envoyer la dernière image Arlo. Cela réveille les caméras sur batterie et use leur batterie.",
+        "de": "Wenn Gladys ein Bild anfordert, nimmt die Kamera ein neues auf, statt das letzte Arlo-Bild zu senden. Das weckt Akku-Kameras und verbraucht Akku.",
+        "es": "Cuando Gladys pide una imagen, la cámara toma una nueva en lugar de enviar la última imagen de Arlo. Despierta las cámaras con batería y gasta su batería."
+      },
+      "required": false,
+      "default": false
+    },
+    {
+      "key": "debug_logs",
+      "type": "boolean",
+      "label": {
+        "en": "Detailed logs",
+        "fr": "Logs détaillés",
+        "de": "Detaillierte Logs",
+        "es": "Registros detallados"
+      },
+      "description": {
+        "en": "Log every Arlo event, to understand a problem. Turn it off afterwards.",
+        "fr": "Écrit chaque événement Arlo dans les logs, pour comprendre un problème. À désactiver ensuite.",
+        "de": "Protokolliert jedes Arlo-Ereignis, um ein Problem zu verstehen. Danach wieder ausschalten.",
+        "es": "Registra cada evento de Arlo, para entender un problema. Desactívelo después."
+      },
+      "required": false,
+      "default": false
+    }
+  ],
+  "actions": [
+    {
+      "key": "send_code",
+      "label": {
+        "en": "Send me a code",
+        "fr": "M’envoyer un code",
+        "de": "Code senden",
+        "es": "Enviarme un código"
+      },
+      "timeout_seconds": 30
+    },
+    {
+      "key": "verify_code",
+      "label": {
+        "en": "Validate the code",
+        "fr": "Valider le code",
+        "de": "Code bestätigen",
+        "es": "Validar el código"
+      },
+      "timeout_seconds": 60,
+      "fields": [
+        {
+          "key": "code",
+          "type": "string",
+          "label": {
+            "en": "Code received",
+            "fr": "Code reçu",
+            "de": "Erhaltener Code",
+            "es": "Código recibido"
+          },
+          "placeholder": {
+            "en": "e.g. 123456",
+            "fr": "ex. 123456",
+            "de": "z. B. 123456",
+            "es": "p. ej. 123456"
+          },
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "timeout_seconds": 60
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "motion_detected",
+      "label": {
+        "en": "Arlo: motion detected",
+        "fr": "Arlo : mouvement détecté",
+        "de": "Arlo: Bewegung erkannt",
+        "es": "Arlo: movimiento detectado"
+      },
+      "description": {
+        "en": "An Arlo camera saw something move.",
+        "fr": "Une caméra Arlo a vu quelque chose bouger.",
+        "de": "Eine Arlo-Kamera hat eine Bewegung gesehen.",
+        "es": "Una cámara Arlo ha visto algo moverse."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Camera",
+            "fr": "Caméra",
+            "de": "Kamera",
+            "es": "Cámara"
+          }
+        }
+      ]
+    },
+    {
+      "key": "object_detected",
+      "label": {
+        "en": "Arlo: person, vehicle... detected",
+        "fr": "Arlo : personne, véhicule… détecté",
+        "de": "Arlo: Person, Fahrzeug... erkannt",
+        "es": "Arlo: persona, vehículo... detectado"
+      },
+      "description": {
+        "en": "Arlo smart detection recognized what moved (needs an Arlo Secure plan). Arrives with the recording, up to one refresh later.",
+        "fr": "La détection intelligente Arlo a reconnu ce qui a bougé (abonnement Arlo Secure requis). Arrive avec l’enregistrement, jusqu’à un rafraîchissement plus tard.",
+        "de": "Die intelligente Arlo-Erkennung hat erkannt, was sich bewegt hat (Arlo-Secure-Abo nötig). Kommt mit der Aufnahme, bis zu einer Aktualisierung später.",
+        "es": "La detección inteligente de Arlo ha reconocido lo que se movió (requiere Arlo Secure). Llega con la grabación, hasta una actualización más tarde."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Camera",
+            "fr": "Caméra",
+            "de": "Kamera",
+            "es": "Cámara"
+          }
+        },
+        {
+          "key": "object",
+          "type": "multi_select",
+          "label": {
+            "en": "What was seen",
+            "fr": "Ce qui a été vu",
+            "de": "Was erkannt wurde",
+            "es": "Lo que se ha visto"
+          },
+          "options": [
+            {
+              "value": "person",
+              "label": {
+                "en": "Person",
+                "fr": "Personne",
+                "de": "Person",
+                "es": "Persona"
+              }
+            },
+            {
+              "value": "vehicle",
+              "label": {
+                "en": "Vehicle",
+                "fr": "Véhicule",
+                "de": "Fahrzeug",
+                "es": "Vehículo"
+              }
+            },
+            {
+              "value": "animal",
+              "label": {
+                "en": "Animal",
+                "fr": "Animal",
+                "de": "Tier",
+                "es": "Animal"
+              }
+            },
+            {
+              "value": "package",
+              "label": {
+                "en": "Package",
+                "fr": "Colis",
+                "de": "Paket",
+                "es": "Paquete"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "object",
+          "type": "string",
+          "label": {
+            "en": "What was seen",
+            "fr": "Ce qui a été vu",
+            "de": "Was erkannt wurde",
+            "es": "Lo que se ha visto"
+          }
+        }
+      ]
+    },
+    {
+      "key": "doorbell_pressed",
+      "label": {
+        "en": "Arlo: doorbell pressed",
+        "fr": "Arlo : sonnette appuyée",
+        "de": "Arlo: Klingel gedrückt",
+        "es": "Arlo: timbre pulsado"
+      },
+      "description": {
+        "en": "Someone pressed the button of an Arlo doorbell.",
+        "fr": "Quelqu’un a appuyé sur le bouton d’une sonnette Arlo.",
+        "de": "Jemand hat die Taste einer Arlo-Türklingel gedrückt.",
+        "es": "Alguien ha pulsado el botón de un timbre Arlo."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Doorbell",
+            "fr": "Sonnette",
+            "de": "Türklingel",
+            "es": "Timbre"
+          }
+        }
+      ]
+    },
+    {
+      "key": "mode_changed",
+      "label": {
+        "en": "Arlo: mode changed",
+        "fr": "Arlo : mode changé",
+        "de": "Arlo: Modus geändert",
+        "es": "Arlo: modo cambiado"
+      },
+      "description": {
+        "en": "An Arlo base changed mode (from the Arlo app, a schedule or a geofence). Not fired when Gladys itself changed it.",
+        "fr": "Une base Arlo a changé de mode (application Arlo, planning ou géorepérage). Pas déclenché quand c’est Gladys qui l’a changé.",
+        "de": "Eine Arlo-Basis hat den Modus gewechselt (Arlo-App, Zeitplan oder Geofencing). Nicht ausgelöst, wenn Gladys selbst ihn geändert hat.",
+        "es": "Una base Arlo ha cambiado de modo (app Arlo, horario o geovalla). No se dispara cuando lo cambió el propio Gladys."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Base",
+            "fr": "Base",
+            "de": "Basis",
+            "es": "Base"
+          }
+        },
+        {
+          "key": "mode",
+          "type": "multi_select",
+          "label": {
+            "en": "New mode",
+            "fr": "Nouveau mode",
+            "de": "Neuer Modus",
+            "es": "Nuevo modo"
+          },
+          "options": [
+            {
+              "value": "armed",
+              "label": {
+                "en": "Armed",
+                "fr": "Armé",
+                "de": "Aktiviert",
+                "es": "Armado"
+              }
+            },
+            {
+              "value": "disarmed",
+              "label": {
+                "en": "Disarmed",
+                "fr": "Désarmé",
+                "de": "Deaktiviert",
+                "es": "Desarmado"
+              }
+            },
+            {
+              "value": "custom",
+              "label": {
+                "en": "Custom mode",
+                "fr": "Mode personnalisé",
+                "de": "Eigener Modus",
+                "es": "Modo personalizado"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "mode",
+          "type": "string",
+          "label": {
+            "en": "Kind of mode",
+            "fr": "Type de mode",
+            "de": "Art des Modus",
+            "es": "Tipo de modo"
+          }
+        },
+        {
+          "key": "mode_name",
+          "type": "string",
+          "label": {
+            "en": "Mode name",
+            "fr": "Nom du mode",
+            "de": "Name des Modus",
+            "es": "Nombre del modo"
+          }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "set_mode",
+      "label": {
+        "en": "Arlo: change mode",
+        "fr": "Arlo : changer de mode",
+        "de": "Arlo: Modus ändern",
+        "es": "Arlo: cambiar de modo"
+      },
+      "description": {
+        "en": "Arm, disarm or switch an Arlo base to one of its custom modes.",
+        "fr": "Armer, désarmer ou passer une base Arlo dans un de ses modes personnalisés.",
+        "de": "Eine Arlo-Basis aktivieren, deaktivieren oder in einen eigenen Modus schalten.",
+        "es": "Armar, desarmar o pasar una base Arlo a uno de sus modos personalizados."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Base",
+            "fr": "Base",
+            "de": "Basis",
+            "es": "Base"
+          },
+          "required": true
+        },
+        {
+          "key": "mode",
+          "type": "string",
+          "label": {
+            "en": "Mode",
+            "fr": "Mode",
+            "de": "Modus",
+            "es": "Modo"
+          },
+          "description": {
+            "en": "\"armed\", \"disarmed\", or the name of a custom mode as shown in the Arlo app.",
+            "fr": "« armed », « disarmed », ou le nom d’un mode personnalisé tel qu’affiché dans l’application Arlo.",
+            "de": "„armed“, „disarmed“ oder der Name eines eigenen Modus wie in der Arlo-App.",
+            "es": "«armed», «disarmed» o el nombre de un modo personalizado tal como aparece en la app Arlo."
+          },
+          "placeholder": {
+            "en": "e.g. armed",
+            "fr": "ex. armed",
+            "de": "z. B. armed",
+            "es": "p. ej. armed"
+          },
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "changed",
+          "type": "boolean",
+          "label": {
+            "en": "Mode changed",
+            "fr": "Mode changé",
+            "de": "Modus geändert",
+            "es": "Modo cambiado"
+          }
+        },
+        {
+          "key": "mode_name",
+          "type": "string",
+          "label": {
+            "en": "Mode name",
+            "fr": "Nom du mode",
+            "de": "Name des Modus",
+            "es": "Nombre del modo"
+          }
+        }
+      ]
+    },
+    {
+      "key": "take_snapshot",
+      "label": {
+        "en": "Arlo: take a snapshot",
+        "fr": "Arlo : prendre une photo",
+        "de": "Arlo: Foto aufnehmen",
+        "es": "Arlo: tomar una foto"
+      },
+      "description": {
+        "en": "The camera takes a new picture, shown in Gladys. Follow it with \"Send camera image\".",
+        "fr": "La caméra prend une nouvelle photo, affichée dans Gladys. Enchaînez avec « Envoyer l’image de la caméra ».",
+        "de": "Die Kamera nimmt ein neues Bild auf, das in Gladys erscheint. Danach „Kamerabild senden“ verwenden.",
+        "es": "La cámara toma una nueva foto, que se muestra en Gladys. Siga con «Enviar imagen de la cámara»."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Camera",
+            "fr": "Caméra",
+            "de": "Kamera",
+            "es": "Cámara"
+          },
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "taken",
+          "type": "boolean",
+          "label": {
+            "en": "Picture taken",
+            "fr": "Photo prise",
+            "de": "Foto aufgenommen",
+            "es": "Foto tomada"
+          }
+        }
+      ]
+    },
+    {
+      "key": "sound_siren",
+      "label": {
+        "en": "Arlo: sound the siren",
+        "fr": "Arlo : déclencher la sirène",
+        "de": "Arlo: Sirene auslösen",
+        "es": "Arlo: activar la sirena"
+      },
+      "description": {
+        "en": "Sound the siren of an Arlo base, siren or camera for a while.",
+        "fr": "Fait sonner la sirène d’une base, d’une sirène ou d’une caméra Arlo un moment.",
+        "de": "Lässt die Sirene einer Arlo-Basis, -Sirene oder -Kamera eine Weile ertönen.",
+        "es": "Hace sonar la sirena de una base, sirena o cámara Arlo durante un tiempo."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Device with a siren",
+            "fr": "Appareil avec sirène",
+            "de": "Gerät mit Sirene",
+            "es": "Dispositivo con sirena"
+          },
+          "required": true
+        },
+        {
+          "key": "duration",
+          "type": "number",
+          "label": {
+            "en": "Duration (s)",
+            "fr": "Durée (s)",
+            "de": "Dauer (s)",
+            "es": "Duración (s)"
+          },
+          "required": false,
+          "default": 60,
+          "min": 5,
+          "max": 300
+        },
+        {
+          "key": "volume",
+          "type": "number",
+          "label": {
+            "en": "Volume (1-8)",
+            "fr": "Volume (1-8)",
+            "de": "Lautstärke (1-8)",
+            "es": "Volumen (1-8)"
+          },
+          "required": false,
+          "default": 8,
+          "min": 1,
+          "max": 8
+        }
+      ],
+      "outputs": [
+        {
+          "key": "started",
+          "type": "boolean",
+          "label": {
+            "en": "Siren started",
+            "fr": "Sirène déclenchée",
+            "de": "Sirene ausgelöst",
+            "es": "Sirena activada"
+          }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "arlo_overview",
+      "label": {
+        "en": "Arlo overview",
+        "fr": "Arlo : vue d’ensemble",
+        "de": "Arlo-Übersicht",
+        "es": "Arlo: resumen"
+      },
+      "description": {
+        "en": "Modes, batteries, latest recordings, arm or disarm everything.",
+        "fr": "Modes, batteries, derniers enregistrements, tout armer ou désarmer.",
+        "de": "Modi, Akkus, letzte Aufnahmen, alles aktivieren oder deaktivieren.",
+        "es": "Modos, baterías, últimas grabaciones, armar o desarmar todo."
+      },
+      "icon": "shield",
+      "action_timeout_seconds": 30
+    },
+    {
+      "key": "arlo_camera",
+      "label": {
+        "en": "Arlo camera",
+        "fr": "Caméra Arlo",
+        "de": "Arlo-Kamera",
+        "es": "Cámara Arlo"
+      },
+      "description": {
+        "en": "One camera: latest picture, battery, motion, snapshot, on/off.",
+        "fr": "Une caméra : dernière image, batterie, mouvement, photo, marche/arrêt.",
+        "de": "Eine Kamera: letztes Bild, Akku, Bewegung, Foto, Ein/Aus.",
+        "es": "Una cámara: última imagen, batería, movimiento, foto, encendido/apagado."
+      },
+      "icon": "video",
+      "action_timeout_seconds": 30,
+      "settings": [
+        {
+          "key": "camera",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Camera",
+            "fr": "Caméra",
+            "de": "Kamera",
+            "es": "Cámara"
+          },
+          "required": true
+        }
+      ]
+    }
+  ]
+}
